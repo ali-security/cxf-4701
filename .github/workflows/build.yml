@@ -36,7 +36,7 @@ jobs:
         run: mvn -v
 
       - name: Build and run tests
-        run: mvn -B -ntp -Dcxf.codegen.jvmArgs="$CXF_CODEGEN_JVM_ARGS" install
+        run: mvn -B -ntp -Dcxf.codegenplugin.forkmode=false -Dcxf.codegen.jvmArgs="$CXF_CODEGEN_JVM_ARGS" install
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4
