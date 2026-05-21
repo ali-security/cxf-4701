@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MAVEN_OPTS: "-XX:MaxPermSize=192m -Xmx768M"
+      MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1024m -Dhttps.protocols=TLSv1.2"
+      CXF_CODEGEN_JVM_ARGS: "-XX:MaxPermSize=256m -Xmx512m -Dhttps.protocols=TLSv1.2"
 
     steps:
       - name: Checkout source
@@ -35,7 +36,7 @@ jobs:
         run: mvn -v
 
       - name: Build and run tests
-        run: mvn -B -ntp install
+        run: mvn -B -ntp -Dcxf.codegen.jvmArgs="$CXF_CODEGEN_JVM_ARGS" install
 
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4
