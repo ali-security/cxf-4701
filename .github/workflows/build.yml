@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1024m -Dhttps.protocols=TLSv1.2"
-      CXF_CODEGEN_JVM_ARGS: "-XX:MaxPermSize=256m -Xmx512m -Dhttps.protocols=TLSv1.2"
+      MAVEN_OPTS: "-XX:MaxPermSize=256m -Xmx1024m -Dhttps.protocols=TLSv1.2 -Djavax.xml.accessExternalSchema=all -Djavax.xml.accessExternalDTD=all"
+      CXF_CODEGEN_JVM_ARGS: "-XX:MaxPermSize=256m -Xmx512m -Dhttps.protocols=TLSv1.2 -Djavax.xml.accessExternalSchema=all -Djavax.xml.accessExternalDTD=all"
 
     steps:
       - name: Checkout source
