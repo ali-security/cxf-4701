@@ -41,6 +41,7 @@ jobs:
             -Dcxf.codegenplugin.forkmode=false \
             -Dcxf.codegen.jvmArgs="$CXF_CODEGEN_JVM_ARGS" \
             -Dcxf.surefire.fork.vmargs="-ea -Djavax.xml.accessExternalSchema=all -Djavax.xml.accessExternalDTD=all -Dhttps.protocols=TLSv1.2" \
+            -Dcxf.surefire.usefile=true \
             install
 
       - name: Upload surefire reports
