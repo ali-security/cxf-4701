@@ -25,6 +25,15 @@ jobs:
           java-version: 7
           cache: maven
 
+      - name: Install Maven 3.8.8 (last version to run on JDK 7)
+        run: |
+          curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o /tmp/maven.tar.gz
+          sudo tar -xzf /tmp/maven.tar.gz -C /opt
+          echo "/opt/apache-maven-3.8.8/bin" >> "$GITHUB_PATH"
+
+      - name: Verify Maven and Java versions
+        run: mvn -v
+
       - name: Build and run tests
         run: mvn -B -ntp install
 
