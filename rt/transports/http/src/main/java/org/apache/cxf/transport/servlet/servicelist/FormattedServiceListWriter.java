@@ -36,7 +36,7 @@ public class FormattedServiceListWriter implements ServiceListWriter {
                                       String title,
                                       boolean showForeignContexts,
                                       Map<String, String> atomMap) {
-        this.styleSheetPath = styleSheetPath;
+        this.styleSheetPath = StringEscapeUtils.escapeHtml4(styleSheetPath);
         this.title = title;
         this.showForeignContexts = showForeignContexts;
         this.atomMap = atomMap;
