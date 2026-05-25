@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.apache.cxf.transport.AbstractDestination;
+import org.apache.cxf.transport.commons_text.StringEscapeUtils;
 import org.apache.cxf.transport.servlet.ServletDestination;
 
 public class UnformattedServiceListWriter implements ServiceListWriter {
@@ -52,6 +53,8 @@ public class UnformattedServiceListWriter implements ServiceListWriter {
                                                AbstractDestination[] destinations) throws IOException {
         for (AbstractDestination sd : destinations) {
             String address = getAbsoluteAddress(baseAddress, sd);
+            address = StringEscapeUtils.escapeHtml4(address);
+
             writer.write(address);
 
             if (renderWsdlList) {
@@ -67,6 +70,8 @@ public class UnformattedServiceListWriter implements ServiceListWriter {
                                                   AbstractDestination[] destinations) throws IOException {
         for (AbstractDestination sd : destinations) {
             String address = getAbsoluteAddress(baseAddress, sd);
+            address = StringEscapeUtils.escapeHtml4(address);
+
             writer.write(address + "?_wadl\n");
         }
     }
