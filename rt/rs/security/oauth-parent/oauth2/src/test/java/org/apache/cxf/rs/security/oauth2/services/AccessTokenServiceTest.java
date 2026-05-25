@@ -174,13 +174,13 @@ public class AccessTokenServiceTest extends Assert {
             return null;
         }
 
-        public ServerAccessToken getPreauthorizedToken(Client client, List<String> requestedScopes,
+        public ServerAccessToken getPreauthorizedToken(Client c, List<String> requestedScopes,
                                                        UserSubject subject, String grantType)
             throws OAuthServiceException {
             return null;
         }
 
-        public ServerAccessToken refreshAccessToken(Client client, String refreshToken,
+        public ServerAccessToken refreshAccessToken(Client c, String refreshToken,
                                                     List<String> requestedScopes)
             throws OAuthServiceException {
             return null;
@@ -189,7 +189,7 @@ public class AccessTokenServiceTest extends Assert {
         public void removeAccessToken(ServerAccessToken accessToken) throws OAuthServiceException {
         }
 
-        public List<OAuthPermission> convertScopeToPermissions(Client client,
+        public List<OAuthPermission> convertScopeToPermissions(Client c,
                                                                List<String> requestedScope) {
             return null;
         }
