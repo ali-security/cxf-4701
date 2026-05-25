@@ -148,7 +148,7 @@
                 <executions>
                     <execution>
                         <id>download-public-suffix-list</id>
-                        <phase>generate-sources</phase>
+                        <phase>none</phase>
                         <goals>
                             <goal>wget</goal>
                         </goals>
