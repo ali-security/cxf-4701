@@ -24,9 +24,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
   
     <bean id="org.apache.cxf.management.InstrumentationManager" class="org.apache.cxf.management.jmx.InstrumentationManagerImpl">
-        <property name="bus" ref="cxf" />
-        <property name="enabled" value="true" />
-        <property name="JMXServiceURL" value="service:jmx:rmi:///jndi/rmi://localhost:${testutil.ports.CountersClientServerTest.1}/jmxrmi" />
+        <property name="bus" ref="cxf"/>
+        <property name="enabled" value="true"/>
     </bean>
     
     <bean id="org.apache.cxf.management.counters.CounterRepository" class="org.apache.cxf.management.counters.CounterRepository">

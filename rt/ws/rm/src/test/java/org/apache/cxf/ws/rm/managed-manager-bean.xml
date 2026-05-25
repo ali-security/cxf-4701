@@ -30,11 +30,8 @@ http://schemas.xmlsoap.org/ws/2005/02/rm/policy http://schemas.xmlsoap.org/ws/20
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="org.apache.cxf.management.InstrumentationManager" class="org.apache.cxf.management.jmx.InstrumentationManagerImpl">
-        <property name="bus" ref="cxf" />
+        <property name="bus" ref="cxf"/>
         <property name="enabled" value="true"/>
-        <property name="threaded" value="false"/>        
-        <property name="daemon" value="false"/>            
-        <property name="JMXServiceURL" value="service:jmx:rmi:///jndi/rmi://localhost:9914/jmxrmi" />
     </bean> 
 
     <cxf:bus>

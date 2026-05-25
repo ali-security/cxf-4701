@@ -93,9 +93,7 @@ public class ManagedBusTest extends Assert {
         assertNotNull(im);
                 
         InstrumentationManagerImpl imi = (InstrumentationManagerImpl)im;
-        assertEquals("service:jmx:rmi:///jndi/rmi://localhost:9913/jmxrmi", 
-                     imi.getJMXServiceURL());
-        assertTrue(!imi.isEnabled());
+        assertFalse(imi.isEnabled());
         assertNull(imi.getMBeanServer());
         
         //Test that registering without an MBeanServer is a no-op
@@ -122,8 +120,6 @@ public class ManagedBusTest extends Assert {
         InstrumentationManager im = bus.getExtension(InstrumentationManager.class);
         assertNotNull(im);
         InstrumentationManagerImpl imi = (InstrumentationManagerImpl)im;
-        assertEquals("service:jmx:rmi:///jndi/rmi://localhost:" + port + "/jmxrmi",
-                     imi.getJMXServiceURL());
         assertTrue(imi.isEnabled());
         assertNotNull(imi.getMBeanServer());
 

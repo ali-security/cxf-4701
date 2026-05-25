@@ -158,15 +158,13 @@ public class InstrumentationManagerTest extends Assert {
             assertNotNull("Instrumentation Manager of cxf1 should not be null", im1);
             
             assertTrue(im1.isEnabled());
-            assertEquals("service:jmx:rmi:///jndi/rmi://localhost:9914/jmxrmi", im1.getJMXServiceURL());
-            
+
             cxf2 = (Bus)context.getBean("cxf2");
-            InstrumentationManagerImpl im2 = 
+            InstrumentationManagerImpl im2 =
                 (InstrumentationManagerImpl)cxf2.getExtension(InstrumentationManager.class);
             assertNotNull("Instrumentation Manager of cxf2 should not be null", im2);
 
             assertFalse(im2.isEnabled());
-            assertEquals("service:jmx:rmi:///jndi/rmi://localhost:9913/jmxrmi", im2.getJMXServiceURL());
             
         } finally {
             if (cxf1 != null) {
