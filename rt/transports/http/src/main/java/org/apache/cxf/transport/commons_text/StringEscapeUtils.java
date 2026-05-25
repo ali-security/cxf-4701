@@ -43,11 +43,11 @@ public final class StringEscapeUtils {
      * as the foundation for a custom translator.
      */
     public static final CharSequenceTranslator ESCAPE_HTML4 =
-            new AggregateTranslator(
-                    new LookupTranslator(EntityArrays.BASIC_ESCAPE),
-                    new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE),
-                    new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE)
-            );
+        new AggregateTranslator(
+            new LookupTranslator(EntityArrays.BASIC_ESCAPE),
+            new LookupTranslator(EntityArrays.ISO8859_1_ESCAPE),
+            new LookupTranslator(EntityArrays.HTML40_EXTENDED_ESCAPE)
+        );
 
     private StringEscapeUtils() {
         // complete
