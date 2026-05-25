@@ -133,6 +133,46 @@ public class JAXRSClientServerSpringBookTest extends AbstractBusClientServerTest
     }
     
     @Test
+    public void testGetServicesPageNotFound() throws Exception {
+        final String address = "http://localhost:" + PORT + "/the/services;a=b";
+        WebClient wc = WebClient.create(address).accept("text/*");
+        WebClient.getConfig(wc).getHttpConduit().getClient().setReceiveTimeout(10000000);
+        assertEquals(404, wc.get().getStatus());
+    }
+
+    @Test
+    public void testGetServicesPage() throws Exception {
+        final String address = "http://localhost:" + PORT + "/the/services";
+        WebClient wc = WebClient.create(address).accept("text/*");
+        String s = wc.get(String.class);
+        assertTrue(s.contains("href=\"/the/services/?stylesheet=1\""));
+        assertTrue(s.contains("<title>CXF - Service list</title>"));
+        assertTrue(s.contains("<a href=\"http://localhost:" + PORT + "/the/"));
+    }
+
+    @Test
+    public void testGetServicesPageWithServletPatternMatchOnly() throws Exception {
+        final String address = "http://localhost:" + PORT + "/the/;a=b";
+        WebClient wc = WebClient.create(address).accept("text/*");
+        String s = wc.get(String.class);
+        assertTrue(s.contains("href=\"/the/?stylesheet=1\""));
+        assertTrue(s.contains("<title>CXF - Service list</title>"));
+        assertFalse(s.contains(";a=b"));
+        assertTrue(s.contains("<a href=\"http://localhost:" + PORT + "/the/"));
+    }
+
+    @Test
+    public void testGetServicesPageWithServletPatternMatchOnly2() throws Exception {
+        final String address = "http://localhost:" + PORT + "/services;a=b;/list;a=b/;a=b";
+        WebClient wc = WebClient.create(address).accept("text/*");
+        String s = wc.get(String.class);
+        assertTrue(s.contains("href=\"/services/list/?stylesheet=1\""));
+        assertTrue(s.contains("<title>CXF - Service list</title>"));
+        assertFalse(s.contains(";a=b"));
+        assertTrue(s.contains("<a href=\"http://localhost:" + PORT + "/services/list/"));
+    }
+
+    @Test
     public void testGetWadlFromWadlLocation() throws Exception {
         String address = "http://localhost:" + PORT + "/the/generated";    
         List<Element> resources = 
