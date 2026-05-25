@@ -173,6 +173,15 @@ public class JAXRSClientServerSpringBookTest extends AbstractBusClientServerTest
     }
 
     @Test
+    public void testStaticResourcesWithRedirectQueryCheck() throws Exception {
+        final String address = "http://localhost:" + PORT + "/services/?.html";
+        WebClient wc = WebClient.create(address).accept("text/*");
+        String s = wc.get(String.class);
+        // Check we don't have a directory listing
+        assertFalse(s.contains("META-INF"));
+    }
+
+    @Test
     public void testGetWadlFromWadlLocation() throws Exception {
         String address = "http://localhost:" + PORT + "/the/generated";    
         List<Element> resources = 

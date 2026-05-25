@@ -271,14 +271,14 @@ public abstract class AbstractHTTPServlet extends HttpServlet implements Filter 
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException {
         if ((dispatcherServletPath != null || dispatcherServletName != null)
-            && (redirectList != null && matchPath(redirectList, request)
+            && (redirectList != null && matchPath(redirectQueryCheck, redirectList, request)
                 || redirectList == null)) {
             // if no redirectList is provided then this servlet is redirecting only
             redirect(request, response, request.getPathInfo());
             return;
         }
-        boolean staticResourcesMatch = staticResourcesList != null 
-            && matchPath(staticResourcesList, request);
+        boolean staticResourcesMatch = staticResourcesList != null
+            && matchPath(false, staticResourcesList, request);
         boolean staticWelcomeFileMatch = staticWelcomeFile != null 
             && (StringUtils.isEmpty(request.getPathInfo()) || request.getPathInfo().equals("/")); 
         if (staticResourcesMatch || staticWelcomeFileMatch) {
@@ -289,15 +289,15 @@ public abstract class AbstractHTTPServlet extends HttpServlet implements Filter 
         invoke(request, response);
     }
     
-    private boolean matchPath(List<Pattern> values, HttpServletRequest request) {
+    private static boolean matchPath(boolean checkRedirect, List<Pattern> values, HttpServletRequest request) {
         String path = request.getPathInfo();
         if (path == null) {
             path = "/";
         }
-        if (redirectQueryCheck) {
+        if (checkRedirect) {
             String queryString = request.getQueryString();
             if (queryString != null && queryString.length() > 0) {
-                path += "?" + queryString; 
+                path += "?" + queryString;
             }
         }
         for (Pattern pattern : values) {
