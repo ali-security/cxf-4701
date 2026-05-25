@@ -153,41 +153,54 @@ public class AccessTokenService extends AbstractOAuthService {
     private Client authenticateClientIfNeeded(MultivaluedMap<String, String> params) {
         Client client = null;
         SecurityContext sc = getMessageContext().getSecurityContext();
-        
-        if (params.containsKey(OAuthConstants.CLIENT_ID)) {
-            // both client_id and client_secret are expected in the form payload
-            client = getAndValidateClient(params.getFirst(OAuthConstants.CLIENT_ID),
-                                          params.getFirst(OAuthConstants.CLIENT_SECRET));
-        } else if (sc.getUserPrincipal() != null) {
-            // client has already authenticated
-            Principal p = sc.getUserPrincipal();
-            String scheme = sc.getAuthenticationScheme();
-            if (OAuthConstants.BASIC_SCHEME.equalsIgnoreCase(scheme)) {
-                // section 2.3.1
-                client = getClient(p.getName());
+        String clientId = params.getFirst(OAuthConstants.CLIENT_ID);
+
+        if (sc.getUserPrincipal() == null) {
+            if (clientId != null) {
+                // both client_id and client_secret are expected in the form payload
+                String clientSecret = params.getFirst(OAuthConstants.CLIENT_SECRET);
+                if (clientSecret != null) {
+                    client = getAndValidateClient(clientId, clientSecret);
+                } else if (canSupportPublicClients) {
+                    client = getClient(clientId);
+                }
             } else {
-                // section 2.3.2
-                // the client has authenticated itself using some other scheme
-                // in which case the mapping between the scheme and the client_id
-                // should've been done and the client_id is expected
-                // on the current message
-                Object clientIdProp = getMessageContext().get(OAuthConstants.CLIENT_ID);
-                if (clientIdProp != null) {
-                    client = getClient(clientIdProp.toString());
-                    // TODO: consider matching client.getUserSubject().getLoginName() 
-                    // against principal.getName() ?
+                // the client id and secret are expected to be in the Basic scheme data
+                String[] parts =
+                    AuthorizationUtils.getAuthorizationParts(getMessageContext());
+                if (OAuthConstants.BASIC_SCHEME.equalsIgnoreCase(parts[0])) {
+                    String[] authInfo = AuthorizationUtils.getBasicAuthParts(parts[1]);
+                    client = getAndValidateClient(authInfo[0], authInfo[1]);
                 }
             }
         } else {
-            // the client id and secret are expected to be in the Basic scheme data
-            String[] parts = 
-                AuthorizationUtils.getAuthorizationParts(getMessageContext());
-            if (OAuthConstants.BASIC_SCHEME.equalsIgnoreCase(parts[0])) {
-                String[] authInfo = AuthorizationUtils.getBasicAuthParts(parts[1]);
-                client = getAndValidateClient(authInfo[0], authInfo[1]);
+            // client has already authenticated
+            Principal p = sc.getUserPrincipal();
+            if (clientId != null) {
+                if (!clientId.equals(p.getName())) {
+                    reportInvalidClient();
+                }
+
+                client = getClient(clientId);
+            } else {
+                String scheme = sc.getAuthenticationScheme();
+                if (OAuthConstants.BASIC_SCHEME.equalsIgnoreCase(scheme)) {
+                    // section 2.3.1
+                    client = getClient(p.getName());
+                } else {
+                    // section 2.3.2
+                    // the client has authenticated itself using some other scheme
+                    // in which case the mapping between the scheme and the client_id
+                    // should've been done and the client_id is expected
+                    // on the current message
+                    Object clientIdProp = getMessageContext().get(OAuthConstants.CLIENT_ID);
+                    if (clientIdProp != null) {
+                        client = getClient(clientIdProp.toString());
+                    }
+                }
             }
         }
-        
+
         if (client == null) {
             throw ExceptionUtils.toNotAuthorizedException(null, null);
         }
